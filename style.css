@@ -1,8 +1,7 @@
 :root {
-  --font: 'Oswald', sans-serif;
-    --main-background-image: url('background.jpg');
+    --font: 'Oswald', sans-serif;
     --match-ranking-slogan-color: #344B13;
-    --match-ranking-image-frame-background-img: url('image-frame-bg.png');
+    --match-ranking-image-frame-background-img: url('key_poster.png');
     --match-ranking-winner-frame-border-color: #bb9773;
     --match-ranking-winner-frame-shadow-color: #bb9773;
     --match-ranking-winner-frame-background-color: #bb9773;
@@ -173,22 +172,26 @@
   
   .bracket-header {
     display: flex;
+    align-items: flex-start; /* Align the text to the top */
+    justify-content: center; /* Center horizontally */
     height: 90px;
     width: 100%;
-    justify-content: center;
     background-color: var(--match-ranking-bracket-header-background-color);
     border-radius: 10px;
     box-shadow: inset 0px 0px 10px 5px var(--match-ranking-bracket-header-shadow-color);
   }
   
   .bracket-header > p {
-    padding: -20px 0;
-    line-height: 70px;
+    margin: 10px 0 0 0;       /* Optional top margin to adjust vertical position */
+    line-height: 1.2;          /* Tighter vertical text spacing */
     font-size: 45px;
     font-weight: 700;
-    letter-spacing: 0.075em;
+    letter-spacing: 0.15em;    /* Space between letters */
+    word-spacing: 0.5em;       /* Space between words */
     color: var(--match-ranking-bracket-header-color);
   }
+  
+  
   
   .bracket-wrapper {
     position: relative;
