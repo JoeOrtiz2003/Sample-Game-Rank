@@ -182,7 +182,7 @@
   }
   
   .bracket-header > p {
-    padding: 10px 0;
+    padding: -20px 0;
     line-height: 70px;
     font-size: 45px;
     font-weight: 700;
