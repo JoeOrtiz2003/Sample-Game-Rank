@@ -1,44 +1,40 @@
 const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
-let sheetName = 'Game 1'; // Initial value
-const query = 'SELECT D, G, H, I, F, P WHERE D IS NOT NULL AND G IS NOT NULL AND H IS NOT NULL AND I IS NOT NULL AND F IS NOT NULL AND P IS NOT NULL ORDER BY D ASC LIMIT 18';
-const sheetNames = [
-  'Game 1', 'Game 2', 'Game 3', 'Game 4', 'Game 5',
-  'Game 6', 'Game 7', 'Game 8', 'Game 9', 'Game 10',
-  'Game 11', 'Game 12', 'Game 13', 'Game 14', 'Game 15'
-];
+let sheetName = 'Game 1';
+// Added Q as index 6 to get team_tag
+const query = 'SELECT D, G, H, I, F, P, E WHERE D IS NOT NULL ORDER BY G DESC LIMIT 17';
 
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
-  initDropdown();
+  createCustomDropdown();
   fetchSheetData();
   createRankingElements(17);
   setInterval(fetchSheetData, 3000);
   autoScrollBracket();
 });
 
-function initDropdown() {
-  const selector = document.getElementById('gameSelector');
-  for (let i = 1; i <= 15; i++) {
-    const option = document.createElement('option');
-    option.value = `Game ${i}`;
-    option.text = `Game ${i}`;
-    selector.appendChild(option);
-  }
+function createCustomDropdown() {
+  const dropdownBtn = document.getElementById('dropdownButton');
+  const menu = document.getElementById('dropdownMenu');
 
-  selector.value = sheetName;
-  document.getElementById('slogan').textContent = sheetName.replace("Game", "Match");
-
-  selector.addEventListener('change', (e) => {
-    sheetName = e.target.value;
-
-    // 👇 Update slogan based on selected game
-    const matchText = sheetName.replace("Game", "Match");
-    document.getElementById('slogan').textContent = matchText;
-
-    fetchSheetData(); // Refresh data for new sheet
+  dropdownBtn.addEventListener('click', () => {
+    menu.style.display = (menu.style.display === 'none') ? 'block' : 'none';
   });
-}
 
+  for (let i = 1; i <= 15; i++) {
+    const game = `Game ${i}`;
+    const item = document.createElement('button');
+    item.textContent = game;
+    item.style = "display:block; width:100%; padding:6px; text-align:left; border:none; background:white; cursor:pointer;";
+    item.addEventListener('click', () => {
+      sheetName = game;
+      document.getElementById('slogan').textContent = game.replace("Game", "Match");
+      dropdownBtn.textContent = game;
+      menu.style.display = 'none';
+      fetchSheetData();
+    });
+    menu.appendChild(item);
+  }
+}
 
 function fetchSheetData() {
   const encodedQuery = encodeURIComponent(query);
@@ -76,12 +72,12 @@ function fetchSheetData() {
 
       if (rows.length > 0) {
         const top = rows[0].c;
-        document.getElementById('team_name').textContent = top[0]?.v || '';
+        document.getElementById('team_tag').textContent = top[6]?.v || ''; // team_tag
         document.getElementById('elims').textContent = top[2]?.v || '';
         document.getElementById('rank_pts').textContent = top[1]?.v || '';
         document.getElementById('points_total').textContent = top[3]?.v || '';
         document.getElementById('team_logo').src = top[4]?.v || 'placeholder.png';
-        document.getElementById('team_logo').alt = top[0]?.v || 'Team Logo';
+        document.getElementById('team_logo').alt = top[6]?.v || 'Team Logo'; // alt = tag
 
         const bgImageURL = top[5]?.v;
         if (bgImageURL) {

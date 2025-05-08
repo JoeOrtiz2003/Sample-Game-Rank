@@ -8,20 +8,22 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="body-class">
-  <div style="position:absolute; top:10px; left:10px; z-index:10;">
-    <label for="gameSelector" style="font-weight:bold; font-size:18px;">Select Game:</label>
-    <select id="gameSelector">
-      <!-- Options added via JS -->
-    </select>
+
+  <!-- Custom Dropdown Container -->
+  <div id="customDropdown" style="position:absolute; top:10px; left:10px; z-index:9999;">
+    <button id="dropdownButton" style="padding:8px; font-weight:bold; font-size:16px;">Select Game</button>
+    <div id="dropdownMenu" style="display:none; position:absolute; top:40px; left:0; background:white; border:1px solid #ccc; max-height:200px; overflow-y:auto;">
+      <!-- Buttons inserted via JS -->
+    </div>
   </div>
 
   <div id="animation-layer">
     <div>
-      <p id="slogan">TOURNAMENT SLOGAN</p>
+      <p id="slogan">Match 1</p>
       <div class="image-frame">
         <div class="winner-frame">
           <div class="team-frame">
-            <p id="team_name"></p>
+            <p id="team_tag"></p> <!-- Using team_tag instead of team_name -->
             <img id="team_logo" src="" alt="Team Logo" />
           </div>
           <div class="winner-stats-wrapper">
@@ -56,9 +58,7 @@
     </div>
   </div>
 
-  <!-- Google Charts Loader -->
   <script src="https://www.gstatic.com/charts/loader.js"></script>
-  <!-- Custom Script -->
   <script src="script.js"></script>
 </body>
 </html>

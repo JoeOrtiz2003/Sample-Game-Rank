@@ -64,6 +64,7 @@ body.body-class {
 }
 
 
+
 .winner-frame {
   display: flex;
   width: 80%;
@@ -95,16 +96,21 @@ body.body-class {
   display: block;  /* <-- Prevents inline spacing issues */
 }
 
-.team-frame > p {
-  font-size: 35px;
+#team_tag {
+  font-size: 40px;
   font-weight: 700;
   color: var(--match-ranking-image-frame-text-color);
   text-align: center;
   width: 130px;
-  margin: 0;         /* <-- Removes browser default margins */
-  padding: 0;        /* <-- Removes any inner padding */
-  line-height: 1;    /* <-- Controls vertical spacing tightly */
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+  word-wrap: break-word;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
+
+
 
 
 .winner-stats-wrapper {
