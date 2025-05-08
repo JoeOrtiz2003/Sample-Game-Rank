@@ -1,7 +1,6 @@
 :root {
   --font: 'Oswald', sans-serif;
   --match-ranking-slogan-color: #344B13;
-  --match-ranking-image-frame-background-img: url('https://assets.onecompiler.app/439bkzw5r/43h2ny295/key_poster.png');
   --match-ranking-winner-frame-border-color: #bb9773;
   --match-ranking-winner-frame-shadow-color: #bb9773;
   --match-ranking-winner-frame-background-color: #bb9773;
@@ -60,10 +59,10 @@ body.body-class {
   margin-top: 2.5%;
   flex-direction: column-reverse;
   align-items: center;
-  background-image: var(--match-ranking-image-frame-background-img);
   background-size: cover;
   background-position: center;
 }
+
 
 .winner-frame {
   display: flex;
