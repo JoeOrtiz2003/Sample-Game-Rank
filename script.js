@@ -1,15 +1,14 @@
 const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
 let sheetName = 'Game 1';
-// Added Q as index 6 to get team_tag
-const query = 'SELECT D, G, H, I, F, P, E WHERE D IS NOT NULL ORDER BY G DESC LIMIT 17';
+const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC LIMIT 17';
 
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
   createCustomDropdown();
+  createRankingElements(17); // One less because top 1 is handled separately
   fetchSheetData();
-  createRankingElements(17);
   setInterval(fetchSheetData, 3000);
-  autoScrollBracket();
+  setTimeout(autoScrollBracket, 100); // Delay to ensure DOM ready
 });
 
 function createCustomDropdown() {
@@ -27,7 +26,7 @@ function createCustomDropdown() {
     item.style = "display:block; width:100%; padding:6px; text-align:left; border:none; background:white; cursor:pointer;";
     item.addEventListener('click', () => {
       sheetName = game;
-      document.getElementById('slogan').textContent = game.replace("Game", "Match");
+      document.getElementById('slogan').textContent = game.replace("Game", "MATCH");
       dropdownBtn.textContent = game;
       menu.style.display = 'none';
       fetchSheetData();
@@ -45,11 +44,19 @@ function fetchSheetData() {
     .then(rep => {
       const jsonData = JSON.parse(rep.substring(47).slice(0, -2));
       const rows = jsonData.table.rows;
-      const getCellValue = (row, index) => row.c[index]?.v || '';
+
+      const getCellValue = (row, index) => {
+        const cell = row.c[index];
+        return (cell && cell.v !== null && cell.v !== undefined) ? cell.v : '';
+      };
+
       const wrapper = document.querySelector('.bracket-wrapper');
       wrapper.innerHTML = '';
 
+      // Skip Top 1 (index 0), show only from index 1 onward
       rows.forEach((row, index) => {
+        if (index === 0) return;
+
         const teamName = getCellValue(row, 0);
         const place = getCellValue(row, 1);
         const kills = getCellValue(row, 2);
@@ -72,12 +79,12 @@ function fetchSheetData() {
 
       if (rows.length > 0) {
         const top = rows[0].c;
-        document.getElementById('team_tag').textContent = top[6]?.v || ''; // team_tag
-        document.getElementById('elims').textContent = top[2]?.v || '';
-        document.getElementById('rank_pts').textContent = top[1]?.v || '';
-        document.getElementById('points_total').textContent = top[3]?.v || '';
+        document.getElementById('team_tag').textContent = top[6]?.v ?? '';
+        document.getElementById('elims').textContent = top[2]?.v ?? '';
+        document.getElementById('rank_pts').textContent = top[1]?.v ?? '';
+        document.getElementById('points_total').textContent = top[3]?.v ?? '';
         document.getElementById('team_logo').src = top[4]?.v || 'placeholder.png';
-        document.getElementById('team_logo').alt = top[6]?.v || 'Team Logo'; // alt = tag
+        document.getElementById('team_logo').alt = top[6]?.v ?? 'Team Logo';
 
         const bgImageURL = top[5]?.v;
         if (bgImageURL) {
@@ -86,17 +93,19 @@ function fetchSheetData() {
       }
     })
     .catch(err => {
-      console.error('Sheet fetch error:', err);
+      console.error('Sheet fetch error:', err.message);
+      console.warn('Failed URL:', url);
       createRankingElements(17);
     });
 }
 
 function autoScrollBracket() {
   const wrapper = document.querySelector('.bracket-wrapper');
+  if (!wrapper) return;
+
   let scrollDown = true;
 
   function scrollAction() {
-    if (!wrapper) return;
     const maxScroll = wrapper.scrollHeight - wrapper.clientHeight;
 
     if (scrollDown) {
@@ -121,16 +130,16 @@ function createRankingElements(count = 17) {
   const wrapper = document.querySelector('.bracket-wrapper');
   wrapper.innerHTML = '';
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 1; i <= count; i++) {
     const bracket = document.createElement('div');
     bracket.className = 'bracket';
     bracket.innerHTML = `
       <p>${i + 1}</p>
-      <div class="bracket-logo"><img src="placeholder.png" alt="Team Logo" /></div>
-      <p>Team ${i + 1}</p>
-      <p>${Math.floor(Math.random() * 20) + 1}</p>
-      <p>${Math.floor(Math.random() * 10)}</p>
-      <p>${Math.floor(Math.random() * 100)}</p>
+      <div class="bracket-logo"><img src="placeholder.png" alt="Team logo" /></div>
+      <p class="team-name">Team Name</p>
+      <p>0</p>
+      <p>0</p>
+      <p>0</p>
     `;
     wrapper.appendChild(bracket);
   }
