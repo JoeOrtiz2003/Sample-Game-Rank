@@ -1,11 +1,11 @@
 const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
 let sheetName = 'Game 1';
-const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC LIMIT 17';
+const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC LIMIT 16';
 
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
   createCustomDropdown();
-  createRankingElements(17); // One less because top 1 is handled separately
+  createRankingElements(16); // Changed from 17 to 16
   fetchSheetData();
   setInterval(fetchSheetData, 3000);
   setTimeout(autoScrollBracket, 100); // Delay to ensure DOM ready
@@ -95,7 +95,7 @@ function fetchSheetData() {
     .catch(err => {
       console.error('Sheet fetch error:', err.message);
       console.warn('Failed URL:', url);
-      createRankingElements(17);
+      createRankingElements(16); // Changed from 17 to 16 on error as well
     });
 }
 
@@ -126,7 +126,7 @@ function autoScrollBracket() {
   scrollAction();
 }
 
-function createRankingElements(count = 17) {
+function createRankingElements(count = 16) { // Default changed from 17 to 16
   const wrapper = document.querySelector('.bracket-wrapper');
   wrapper.innerHTML = '';
 

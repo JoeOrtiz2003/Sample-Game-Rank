@@ -1,16 +1,16 @@
 :root {
   --font: 'Oswald', sans-serif;
   --match-ranking-slogan-color: white;
-  --match-ranking-winner-frame-border-color: #2b0000;
+  --match-ranking-winner-frame-border-color: #990000;
   --match-ranking-winner-frame-shadow-color: #6f0000;
-  --match-ranking-winner-frame-background-color: #2b0000;
+  --match-ranking-winner-frame-background-color: #2b0001;
   --match-ranking-image-frame-border-color: rgba(255, 0, 0, 0);
   --match-ranking-image-frame-text-color: white;
   --match-ranking-bigger-text-color: white;
   --match-ranking-smaller-text-color: white;
   --match-ranking-divider-color: white;
-  --match-ranking-bracket-header-background-color: #2b0000;
-  --match-ranking-bracket-header-shadow-color: #2b0000;
+  --match-ranking-bracket-header-background-color: #4b0000;
+  --match-ranking-bracket-header-shadow-color: #4b0000;
   --match-ranking-bracket-header-color: white;
   --match-ranking-bracket-shadow-color: #2b0000;
   --match-ranking-bracket-background-color: #2b0000;
