@@ -54,7 +54,8 @@ function fetchSheetData() {
       const wrapper = document.querySelector('.bracket-wrapper');
       wrapper.innerHTML = '';
 
-      rows.forEach((row, index) => {
+      // Skip the first item (index 0)
+      rows.slice(1).forEach((row, index) => {
         const teamName = getCellValue(row, 0);
         const place = getCellValue(row, 1);
         const kills = getCellValue(row, 2);
@@ -65,7 +66,7 @@ function fetchSheetData() {
         const bracket = document.createElement('div');
         bracket.className = 'bracket';
         bracket.innerHTML = `
-          <p>${index + 1}</p>
+          <p>${index + 2}</p>
           <div class="bracket-logo"><img src="${logoURL}" alt="${teamName} logo" /></div>
           <p>${teamName}</p>
           <p>${place}</p>
