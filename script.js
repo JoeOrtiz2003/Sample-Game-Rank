@@ -6,7 +6,7 @@ const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AA DESC
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
   createCustomDropdown();
-  createRankingElements(16);
+  createRankingElements(15); // Show only 15 since top 1 is excluded
   fetchSheetData();
   setInterval(fetchSheetData, 3000);
   setTimeout(autoScrollBracket, 100);
@@ -54,7 +54,10 @@ function fetchSheetData() {
       const wrapper = document.querySelector('.bracket-wrapper');
       wrapper.innerHTML = '';
 
+      // Show only index 1 to 15 (skip top 1)
       rows.forEach((row, index) => {
+        if (index === 0) return; // Skip the top team
+
         const teamName = getCellValue(row, 0);
         const place = getCellValue(row, 1);
         const kills = getCellValue(row, 2);
@@ -65,7 +68,7 @@ function fetchSheetData() {
         const bracket = document.createElement('div');
         bracket.className = 'bracket';
         bracket.innerHTML = `
-          <p>${index + 1}</p>
+          <p>${index}</p>
           <div class="bracket-logo"><img src="${logoURL}" alt="${teamName} logo" /></div>
           <p>${teamName}</p>
           <p>${place}</p>
@@ -75,6 +78,7 @@ function fetchSheetData() {
         wrapper.appendChild(bracket);
       });
 
+      // Use Top 1 for featured display
       if (rows.length > 0) {
         const top = rows[0].c;
         document.getElementById('team_tag').textContent = top[6]?.v ?? '';
@@ -93,7 +97,7 @@ function fetchSheetData() {
     .catch(err => {
       console.error('Sheet fetch error:', err.message);
       console.warn('Failed URL:', url);
-      createRankingElements(16);
+      createRankingElements(15);
     });
 }
 
@@ -124,15 +128,15 @@ function autoScrollBracket() {
   scrollAction();
 }
 
-function createRankingElements(count = 16) {
+function createRankingElements(count = 15) {
   const wrapper = document.querySelector('.bracket-wrapper');
   wrapper.innerHTML = '';
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 1; i <= count; i++) {
     const bracket = document.createElement('div');
     bracket.className = 'bracket';
     bracket.innerHTML = `
-      <p>${i + 1}</p>
+      <p>${i}</p>
       <div class="bracket-logo"><img src="placeholder.png" alt="Team logo" /></div>
       <p class="team-name">Team Name</p>
       <p>0</p>
