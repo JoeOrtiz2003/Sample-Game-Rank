@@ -9,13 +9,17 @@
 </head>
 <body class="body-class">
 
-  <!-- Custom Dropdown Container -->
-  <div id="customDropdown" style="position:absolute; top:10px; left:10px; z-index:9999;">
-    <button id="dropdownButton" style="padding:8px; font-weight:bold; font-size:16px;">Select Game</button>
-    <div id="dropdownMenu" style="display:none; position:absolute; top:40px; left:0; background:white; border:1px solid #ccc; max-height:200px; overflow-y:auto;">
-      <!-- Buttons inserted via JS -->
-    </div>
+<div id="customDropdown" style="position:absolute; top:10px; left:10px; z-index:9999;">
+  <button id="dropdownButton" style="padding:8px; font-weight:bold; font-size:16px; width: 140px;">Select Game</button>
+  <div style="margin-top: 8px; display: flex; gap: 8px; width: 140px;">
+    <button id="scrollUpButton" style="padding:8px; font-weight:bold; font-size:14px; flex: 1;">▲ Scroll Up</button>
+    <button id="scrollDownButton" style="padding:8px; font-weight:bold; font-size:14px; flex: 1;">▼ Scroll Down</button>
   </div>
+  <div id="dropdownMenu" style="display:none; position:absolute; top:40px; left:0; background:white; border:1px solid #ccc; max-height:200px; overflow-y:auto;">
+    <!-- Buttons inserted via JS -->
+  </div>
+</div>
+
 
   <div id="animation-layer">
     <div>

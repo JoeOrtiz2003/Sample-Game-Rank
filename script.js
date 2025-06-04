@@ -1,15 +1,14 @@
 const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
 let sheetName = 'Game 1';
-// Sorted by total score (column AA)
-const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AA DESC LIMIT 16';
+const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC LIMIT 18';
 
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
   createCustomDropdown();
-  createRankingElements(16);
+  createRankingElements(18); 
   fetchSheetData();
   setInterval(fetchSheetData, 3000);
-  setTimeout(autoScrollBracket, 100);
+  // Removed autoScrollBracket and related calls
 });
 
 function createCustomDropdown() {
@@ -34,6 +33,18 @@ function createCustomDropdown() {
     });
     menu.appendChild(item);
   }
+
+  // Scroll buttons event listeners
+  const wrapper = document.querySelector('.bracket-wrapper');
+  document.getElementById('scrollUpButton').addEventListener('click', () => {
+    if (!wrapper) return;
+    wrapper.scrollBy({ top: -500, behavior: 'smooth' });
+  });
+
+  document.getElementById('scrollDownButton').addEventListener('click', () => {
+    if (!wrapper) return;
+    wrapper.scrollBy({ top: 500, behavior: 'smooth' });
+  });
 }
 
 function fetchSheetData() {
@@ -54,8 +65,15 @@ function fetchSheetData() {
       const wrapper = document.querySelector('.bracket-wrapper');
       wrapper.innerHTML = '';
 
-      // Skip the first item (index 0)
-      rows.slice(1).forEach((row, index) => {
+      // Sort rows except the first/top one by total points descending
+      const sortedRows = rows.slice(1).sort((a, b) => {
+        const totalA = a.c[3]?.v || 0;
+        const totalB = b.c[3]?.v || 0;
+        return totalB - totalA;
+      });
+
+      // Render sorted rows
+      sortedRows.forEach((row, index) => {
         const teamName = getCellValue(row, 0);
         const place = getCellValue(row, 1);
         const kills = getCellValue(row, 2);
@@ -94,42 +112,15 @@ function fetchSheetData() {
     .catch(err => {
       console.error('Sheet fetch error:', err.message);
       console.warn('Failed URL:', url);
-      createRankingElements(16);
+      createRankingElements(18);
     });
 }
 
-function autoScrollBracket() {
-  const wrapper = document.querySelector('.bracket-wrapper');
-  if (!wrapper) return;
-
-  let scrollDown = true;
-
-  function scrollAction() {
-    const maxScroll = wrapper.scrollHeight - wrapper.clientHeight;
-
-    if (scrollDown) {
-      wrapper.scrollTo({ top: maxScroll, behavior: 'smooth' });
-      setTimeout(() => {
-        scrollDown = false;
-        scrollAction();
-      }, 5000);
-    } else {
-      wrapper.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(() => {
-        scrollDown = true;
-        scrollAction();
-      }, 10000);
-    }
-  }
-
-  scrollAction();
-}
-
-function createRankingElements(count = 16) {
+function createRankingElements(count = 18) { 
   const wrapper = document.querySelector('.bracket-wrapper');
   wrapper.innerHTML = '';
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 1; i <= count; i++) {
     const bracket = document.createElement('div');
     bracket.className = 'bracket';
     bracket.innerHTML = `

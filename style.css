@@ -1,19 +1,19 @@
 :root {
   --font: 'Oswald', sans-serif;
   --match-ranking-slogan-color: white;
-  --match-ranking-winner-frame-border-color: #990000;
-  --match-ranking-winner-frame-shadow-color: #6f0000;
-  --match-ranking-winner-frame-background-color: #2b0001;
+  --match-ranking-winner-frame-border-color: #0c5a71;
+  --match-ranking-winner-frame-shadow-color: #098ab1;
+  --match-ranking-winner-frame-background-color: #0c5a71;
   --match-ranking-image-frame-border-color: rgba(255, 0, 0, 0);
   --match-ranking-image-frame-text-color: white;
   --match-ranking-bigger-text-color: white;
   --match-ranking-smaller-text-color: white;
   --match-ranking-divider-color: white;
-  --match-ranking-bracket-header-background-color: #4b0000;
-  --match-ranking-bracket-header-shadow-color: #4b0000;
+  --match-ranking-bracket-header-background-color: #0d738d;
+  --match-ranking-bracket-header-shadow-color: #0c5a71;
   --match-ranking-bracket-header-color: white;
-  --match-ranking-bracket-shadow-color: #2b0000;
-  --match-ranking-bracket-background-color: #2b0000;
+  --match-ranking-bracket-shadow-color: #0c5a71;
+  --match-ranking-bracket-background-color: #0d738d;
   --match-ranking-bracket-color: white;
 }
 
@@ -53,7 +53,6 @@ body.body-class {
   text-transform: uppercase;
 }
 
-
 .image-frame {
   display: flex;
   width: 864px;
@@ -64,8 +63,6 @@ body.body-class {
   background-size: cover;
   background-position: center;
 }
-
-
 
 .winner-frame {
   display: flex;
@@ -112,9 +109,6 @@ body.body-class {
   overflow-wrap: anywhere;
 }
 
-
-
-
 .winner-stats-wrapper {
   display: flex;
   padding-right: 20px;
@@ -130,28 +124,24 @@ body.body-class {
 }
 
 .bigger-text {
-  margin: 0;                  /* Removes default margin */
-  padding: 0;                 /* Removes padding if any */
-  line-height: 1.5;             /* Tight line spacing (adjustable) */
+  margin: 0;                  
+  padding: 0;                 
+  line-height: 1.5;            
   font-size: 80px;
   font-weight: 600;
   color: var(--match-ranking-bigger-text-color);
   text-align: center;
 }
 
-
-
-
 .smaller-text {
-  margin: 0;                        /* Removes default vertical spacing */
-  padding: 0;                       /* Ensures no internal spacing */
-  line-height: 1;                   /* Tightens vertical spacing */
+  margin: 0;                        
+  padding: 0;                       
+  line-height: 1;                   
   font-size: 40px;
   font-weight: 700;
   color: var(--match-ranking-smaller-text-color);
   text-align: center;
 }
-
 
 .divider {
   width: 5px;
@@ -183,7 +173,6 @@ body.body-class {
   box-shadow: inset 0 0 10px 5px var(--match-ranking-bracket-header-shadow-color);
 }
 
-
 .bracket-header > p {
   width: 15%;
   font-size: 45px;
@@ -192,7 +181,6 @@ body.body-class {
   text-align: center;
   margin: 10px 10px 0 10px; /* Adds horizontal gap via margin */
 }
-
 
 .bracket-wrapper {
   position: relative;
