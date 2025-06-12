@@ -5,7 +5,7 @@ const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
   createCustomDropdown();
-  createRankingElements(18);
+  createRankingElements(17); // Show only 17 in bracket (top 1 is shown separately)
   fetchSheetData();
   setInterval(fetchSheetData, 300);
 });
@@ -33,7 +33,6 @@ function createCustomDropdown() {
     menu.appendChild(item);
   }
 
-  // Scroll buttons event listeners
   const wrapper = document.querySelector('.bracket-wrapper');
   document.getElementById('scrollUpButton').addEventListener('click', () => {
     if (!wrapper) return;
@@ -64,15 +63,30 @@ function fetchSheetData() {
       const wrapper = document.querySelector('.bracket-wrapper');
       wrapper.innerHTML = '';
 
-      // Sort rows except the first/top one by total points descending
       const sortedRows = rows.slice(1).sort((a, b) => {
         const totalA = a.c[3]?.v || 0;
         const totalB = b.c[3]?.v || 0;
         return totalB - totalA;
       });
 
-      // Render sorted rows
-      sortedRows.forEach((row, index) => {
+      // ✅ Set the actual winner
+      if (sortedRows.length > 0) {
+        const top = sortedRows[0].c;
+        document.getElementById('team_tag').textContent = top[6]?.v ?? '';
+        document.getElementById('elims').textContent = top[2]?.v ?? '';
+        document.getElementById('rank_pts').textContent = top[1]?.v ?? '';
+        document.getElementById('points_total').textContent = top[3]?.v ?? '';
+        document.getElementById('team_logo').src = top[4]?.v || 'placeholder.png';
+        document.getElementById('team_logo').alt = top[6]?.v ?? 'Team Logo';
+
+        const bgImageURL = top[5]?.v;
+        if (bgImageURL) {
+          document.querySelector('.image-frame').style.backgroundImage = `url('${bgImageURL}')`;
+        }
+      }
+
+      // ✅ Render bracket starting from 2nd place (skip winner)
+      sortedRows.slice(1).forEach((row, index) => {
         const teamName = getCellValue(row, 0);
         const place = getCellValue(row, 1);
         const kills = getCellValue(row, 2);
@@ -92,31 +106,15 @@ function fetchSheetData() {
         `;
         wrapper.appendChild(bracket);
       });
-
-      // ✅ FIXED: show actual top team based on sorted data
-      if (sortedRows.length > 0) {
-        const top = sortedRows[0].c;
-        document.getElementById('team_tag').textContent = top[6]?.v ?? '';
-        document.getElementById('elims').textContent = top[2]?.v ?? '';
-        document.getElementById('rank_pts').textContent = top[1]?.v ?? '';
-        document.getElementById('points_total').textContent = top[3]?.v ?? '';
-        document.getElementById('team_logo').src = top[4]?.v || 'placeholder.png';
-        document.getElementById('team_logo').alt = top[6]?.v ?? 'Team Logo';
-
-        const bgImageURL = top[5]?.v;
-        if (bgImageURL) {
-          document.querySelector('.image-frame').style.backgroundImage = `url('${bgImageURL}')`;
-        }
-      }
     })
     .catch(err => {
       console.error('Sheet fetch error:', err.message);
       console.warn('Failed URL:', url);
-      createRankingElements(18);
+      createRankingElements(17);
     });
 }
 
-function createRankingElements(count = 18) {
+function createRankingElements(count = 17) {
   const wrapper = document.querySelector('.bracket-wrapper');
   wrapper.innerHTML = '';
 
