@@ -7,7 +7,7 @@ google.charts.setOnLoadCallback(() => {
   createCustomDropdown();
   createRankingElements(18); 
   fetchSheetData();
-  setInterval(fetchSheetData, 3000);
+  setInterval(fetchSheetData, 300);
   // Removed autoScrollBracket and related calls
 });
 
@@ -38,12 +38,12 @@ function createCustomDropdown() {
   const wrapper = document.querySelector('.bracket-wrapper');
   document.getElementById('scrollUpButton').addEventListener('click', () => {
     if (!wrapper) return;
-    wrapper.scrollBy({ top: -500, behavior: 'smooth' });
+    wrapper.scrollBy({ top: -550, behavior: 'smooth' });
   });
 
   document.getElementById('scrollDownButton').addEventListener('click', () => {
     if (!wrapper) return;
-    wrapper.scrollBy({ top: 500, behavior: 'smooth' });
+    wrapper.scrollBy({ top: 550, behavior: 'smooth' });
   });
 }
 
