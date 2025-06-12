@@ -1,13 +1,13 @@
 const sheetId = '1srwCRcCf_grbInfDSURVzXXRqIqxQ6_IIPG-4_gnSY8';
 let sheetName = 'Game 1';
-const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC LIMIT 18';
+const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC LIMIT 19';
 
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
   createCustomDropdown();
-  createRankingElements(17); // Show only 17 in bracket (top 1 is shown separately)
+  createRankingElements(18); // create 18 placeholders
   fetchSheetData();
-  setInterval(fetchSheetData, 300);
+  setInterval(fetchSheetData, 5000); // update every 5 seconds
 });
 
 function createCustomDropdown() {
@@ -35,13 +35,10 @@ function createCustomDropdown() {
 
   const wrapper = document.querySelector('.bracket-wrapper');
   document.getElementById('scrollUpButton').addEventListener('click', () => {
-    if (!wrapper) return;
-    wrapper.scrollBy({ top: -550, behavior: 'smooth' });
+    wrapper?.scrollBy({ top: -550, behavior: 'smooth' });
   });
-
   document.getElementById('scrollDownButton').addEventListener('click', () => {
-    if (!wrapper) return;
-    wrapper.scrollBy({ top: 550, behavior: 'smooth' });
+    wrapper?.scrollBy({ top: 550, behavior: 'smooth' });
   });
 }
 
@@ -55,44 +52,40 @@ function fetchSheetData() {
       const jsonData = JSON.parse(rep.substring(47).slice(0, -2));
       const rows = jsonData.table.rows;
 
+      if (!rows || rows.length === 0) return;
+
       const getCellValue = (row, index) => {
         const cell = row.c[index];
-        return (cell && cell.v !== null && cell.v !== undefined) ? cell.v : '';
+        return cell?.v ?? '';
       };
 
+      // Sort descending by total points (column 3)
+      const sortedRows = [...rows].sort((a, b) => {
+        return (b.c[3]?.v || 0) - (a.c[3]?.v || 0);
+      });
+
+      // 🏆 Winner (top 1 team)
+      const winner = sortedRows[0].c;
+      document.getElementById('team_tag').textContent = winner[6]?.v ?? '';
+      document.getElementById('elims').textContent = winner[2]?.v ?? '';
+      document.getElementById('rank_pts').textContent = winner[1]?.v ?? '';
+      document.getElementById('points_total').textContent = winner[3]?.v ?? '';
+      document.getElementById('team_logo').src = winner[4]?.v || 'placeholder.png';
+      document.getElementById('team_logo').alt = winner[6]?.v ?? 'Team Logo';
+      if (winner[5]?.v) {
+        document.querySelector('.image-frame').style.backgroundImage = `url('${winner[5].v}')`;
+      }
+
+      // 🏅 Render teams 2 to 19 in bracket
       const wrapper = document.querySelector('.bracket-wrapper');
       wrapper.innerHTML = '';
 
-      const sortedRows = rows.slice(1).sort((a, b) => {
-        const totalA = a.c[3]?.v || 0;
-        const totalB = b.c[3]?.v || 0;
-        return totalB - totalA;
-      });
-
-      // ✅ Set the actual winner
-      if (sortedRows.length > 0) {
-        const top = sortedRows[0].c;
-        document.getElementById('team_tag').textContent = top[6]?.v ?? '';
-        document.getElementById('elims').textContent = top[2]?.v ?? '';
-        document.getElementById('rank_pts').textContent = top[1]?.v ?? '';
-        document.getElementById('points_total').textContent = top[3]?.v ?? '';
-        document.getElementById('team_logo').src = top[4]?.v || 'placeholder.png';
-        document.getElementById('team_logo').alt = top[6]?.v ?? 'Team Logo';
-
-        const bgImageURL = top[5]?.v;
-        if (bgImageURL) {
-          document.querySelector('.image-frame').style.backgroundImage = `url('${bgImageURL}')`;
-        }
-      }
-
-      // ✅ Render bracket starting from 2nd place (skip winner)
-      sortedRows.slice(1).forEach((row, index) => {
+      sortedRows.slice(1, 18).forEach((row, index) => {
         const teamName = getCellValue(row, 0);
         const place = getCellValue(row, 1);
         const kills = getCellValue(row, 2);
         const total = getCellValue(row, 3);
         const logoURL = getCellValue(row, 4);
-        const bgImageURL = getCellValue(row, 5);
 
         const bracket = document.createElement('div');
         bracket.className = 'bracket';
@@ -109,12 +102,11 @@ function fetchSheetData() {
     })
     .catch(err => {
       console.error('Sheet fetch error:', err.message);
-      console.warn('Failed URL:', url);
-      createRankingElements(17);
+      createRankingElements(18); // fallback placeholder
     });
 }
 
-function createRankingElements(count = 17) {
+function createRankingElements(count = 18) {
   const wrapper = document.querySelector('.bracket-wrapper');
   wrapper.innerHTML = '';
 
