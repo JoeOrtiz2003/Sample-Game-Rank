@@ -5,10 +5,9 @@ const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
   createCustomDropdown();
-  createRankingElements(18); 
+  createRankingElements(18);
   fetchSheetData();
   setInterval(fetchSheetData, 300);
-  // Removed autoScrollBracket and related calls
 });
 
 function createCustomDropdown() {
@@ -94,8 +93,9 @@ function fetchSheetData() {
         wrapper.appendChild(bracket);
       });
 
-      if (rows.length > 0) {
-        const top = rows[0].c;
+      // ✅ FIXED: show actual top team based on sorted data
+      if (sortedRows.length > 0) {
+        const top = sortedRows[0].c;
         document.getElementById('team_tag').textContent = top[6]?.v ?? '';
         document.getElementById('elims').textContent = top[2]?.v ?? '';
         document.getElementById('rank_pts').textContent = top[1]?.v ?? '';
@@ -116,7 +116,7 @@ function fetchSheetData() {
     });
 }
 
-function createRankingElements(count = 18) { 
+function createRankingElements(count = 18) {
   const wrapper = document.querySelector('.bracket-wrapper');
   wrapper.innerHTML = '';
 
