@@ -5,9 +5,9 @@ const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
   createCustomDropdown();
-  createRankingElements(18); // create 18 placeholders
+  createRankingElements(18);
   fetchSheetData();
-  setInterval(fetchSheetData, 5000); // update every 5 seconds
+  setInterval(fetchSheetData, 5000);
 });
 
 function createCustomDropdown() {
@@ -59,12 +59,22 @@ function fetchSheetData() {
         return cell?.v ?? '';
       };
 
-      // Sort descending by total points (column 3)
+      // Sorting: total desc -> place desc -> kills desc (your actual rule)
       const sortedRows = [...rows].sort((a, b) => {
-        return (b.c[3]?.v || 0) - (a.c[3]?.v || 0);
+        const totalA = a.c[3]?.v || 0;
+        const totalB = b.c[3]?.v || 0;
+        if (totalB !== totalA) return totalB - totalA;
+
+        const placeA = a.c[1]?.v ?? 0;  
+        const placeB = b.c[1]?.v ?? 0;
+        if (placeA !== placeB) return placeB - placeA;  // higher place is better
+
+        const killsA = a.c[2]?.v || 0;
+        const killsB = b.c[2]?.v || 0;
+        return killsB - killsA;
       });
 
-      // 🏆 Winner (top 1 team)
+      // Display Top 1 (winner box)
       const winner = sortedRows[0].c;
       document.getElementById('team_tag').textContent = winner[6]?.v ?? '';
       document.getElementById('elims').textContent = winner[2]?.v ?? '';
@@ -76,7 +86,7 @@ function fetchSheetData() {
         document.querySelector('.image-frame').style.backgroundImage = `url('${winner[5].v}')`;
       }
 
-      // 🏅 Render teams 2 to 19 in bracket
+      // Display rest of teams
       const wrapper = document.querySelector('.bracket-wrapper');
       wrapper.innerHTML = '';
 
@@ -102,7 +112,7 @@ function fetchSheetData() {
     })
     .catch(err => {
       console.error('Sheet fetch error:', err.message);
-      createRankingElements(18); // fallback placeholder
+      createRankingElements(18);
     });
 }
 
