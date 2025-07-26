@@ -5,7 +5,7 @@ const query = 'SELECT V, Y, Z, AA, X, AH, W WHERE U IS NOT NULL ORDER BY AH DESC
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.setOnLoadCallback(() => {
   createCustomDropdown();
-  createRankingElements(18);
+  createRankingElements(19);
   fetchSheetData();
   setInterval(fetchSheetData, 5000);
 });
@@ -90,7 +90,7 @@ function fetchSheetData() {
       const wrapper = document.querySelector('.bracket-wrapper');
       wrapper.innerHTML = '';
 
-      sortedRows.slice(1, 18).forEach((row, index) => {
+      sortedRows.slice(1, 19).forEach((row, index) => {
         const teamName = getCellValue(row, 0);
         const place = getCellValue(row, 1);
         const kills = getCellValue(row, 2);
@@ -116,7 +116,7 @@ function fetchSheetData() {
     });
 }
 
-function createRankingElements(count = 18) {
+function createRankingElements(count = 19) {
   const wrapper = document.querySelector('.bracket-wrapper');
   wrapper.innerHTML = '';
 
